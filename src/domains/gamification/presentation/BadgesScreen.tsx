@@ -1,15 +1,14 @@
 import { motion } from 'framer-motion'
-import { Award, Lock, Trophy } from 'lucide-react'
+import { Award, Lock } from 'lucide-react'
 import { Card } from '@/shared/ui/Card'
 import { Spinner } from '@/shared/ui/Spinner'
 import { PageHeader } from '@/shared/ui/PageHeader'
 import { cn } from '@/shared/lib/cn'
-import { useBadgeProgress, useMyTrophies } from './useGamification'
+import { useBadgeProgress } from './useGamification'
 import type { BadgeProgress } from '../domain/Badge'
 
 export function BadgesScreen() {
   const { badges, earnedCount, isLoading } = useBadgeProgress()
-  const { data: trophies } = useMyTrophies()
 
   if (isLoading) {
     return (
@@ -46,44 +45,7 @@ export function BadgesScreen() {
         }
       />
 
-      {trophies && trophies.length > 0 && (
-        <section className="mt-8">
-          <SectionHeading icon={<Trophy className="size-4" />} tone="amber">
-            Troféus
-          </SectionHeading>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {trophies.map((trophy) => (
-              <Card
-                key={trophy.id}
-                className="flex items-start gap-3.5 border-amber-200/70 bg-amber-50/60 p-5 backdrop-blur-xl"
-              >
-                <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-linear-to-br from-amber-400 to-amber-600 text-white shadow-[0_8px_24px_-8px_rgb(245_158_11/0.6),inset_0_1px_0_0_rgb(255_255_255/0.3)]">
-                  <Trophy className="size-5" />
-                </span>
-                <div className="min-w-0">
-                  <p className="font-bold tracking-tight text-ink">{trophy.name}</p>
-                  {trophy.description && (
-                    <p className="mt-0.5 text-sm leading-relaxed text-muted">
-                      {trophy.description}
-                    </p>
-                  )}
-                  {trophy.earnedAt && (
-                    <p className="mt-1.5 text-xs font-medium text-amber-700">
-                      {formatDate(trophy.earnedAt)}
-                    </p>
-                  )}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </section>
-      )}
-
       <section className="mt-8">
-        <SectionHeading icon={<Award className="size-4" />} tone="brand">
-          Medalhas
-        </SectionHeading>
-
         {badges.length === 0 ? (
           <Card className="p-10 text-center">
             <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-ink/5 text-muted">

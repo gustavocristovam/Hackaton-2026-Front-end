@@ -24,7 +24,6 @@ import {
   useOrganizationRanking,
   useMyOrganizationsActive,
 } from './useOrganization'
-import { useCurrentOrgStore } from './currentOrgStore'
 
 /**
  * Domínio de organização: lista as organizações do usuário, permite alternar

@@ -6,7 +6,6 @@ export const gamificationKeys = {
   all: ['gamification'] as const,
   catalog: () => [...gamificationKeys.all, 'catalog'] as const,
   mine: () => [...gamificationKeys.all, 'mine'] as const,
-  trophies: () => [...gamificationKeys.all, 'trophies'] as const,
 }
 
 /** Catálogo + conquistas do usuário, já cruzados pela regra de domínio. */
@@ -27,11 +26,4 @@ export function useBadgeProgress() {
     isLoading: catalog.isLoading || mine.isLoading,
     error: catalog.error ?? mine.error,
   }
-}
-
-export function useMyTrophies() {
-  return useQuery({
-    queryKey: gamificationKeys.trophies(),
-    queryFn: () => gamificationRepository.myTrophies(),
-  })
 }

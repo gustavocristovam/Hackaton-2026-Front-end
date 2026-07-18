@@ -1,6 +1,6 @@
 import { apiClient } from '@/shared/api/apiClient'
-import type { Badge, EarnedBadge, Trophy } from '../domain/Badge'
-import { toBadges, toEarnedBadges, toTrophies } from './badgeDto'
+import type { Badge, EarnedBadge } from '../domain/Badge'
+import { toBadges, toEarnedBadges } from './badgeDto'
 
 export const gamificationRepository = {
   async catalog(): Promise<Badge[]> {
@@ -8,8 +8,5 @@ export const gamificationRepository = {
   },
   async myBadges(): Promise<EarnedBadge[]> {
     return toEarnedBadges(await apiClient.get<unknown>('/badges/me'))
-  },
-  async myTrophies(): Promise<Trophy[]> {
-    return toTrophies(await apiClient.get<unknown>('/trophies/me'))
   },
 }

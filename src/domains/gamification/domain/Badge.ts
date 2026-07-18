@@ -1,4 +1,4 @@
-/** Medalhas e troféus (domínio puro). */
+/** Medalhas (domínio puro). */
 
 export interface Badge {
   id: string
@@ -8,13 +8,6 @@ export interface Badge {
 }
 
 export interface EarnedBadge extends Badge {
-  earnedAt: string | null
-}
-
-export interface Trophy {
-  id: string
-  name: string
-  description: string
   earnedAt: string | null
 }
 
