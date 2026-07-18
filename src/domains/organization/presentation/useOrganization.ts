@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { OrgType, Organization } from '../domain/Organization'
 import {
@@ -42,6 +43,24 @@ export function useMyOrganizations() {
         .map((r) => r.value)
     },
   })
+}
+
+/**
+ * Reconcilia a organização selecionada com a lista real: se a ativa saiu
+ * (ou nunca foi escolhida), cai para a primeira disponível.
+ */
+export function useMyOrganizationsActive(organizations: Organization[] | undefined) {
+  const activeId = useCurrentOrgStore((s) => s.activeId)
+  const setActive = useCurrentOrgStore((s) => s.setActive)
+
+  useEffect(() => {
+    if (!organizations?.length) return
+    if (!activeId || !organizations.some((org) => org.id === activeId)) {
+      setActive(organizations[0]!.id)
+    }
+  }, [organizations, activeId, setActive])
+
+  return { activeId, setActive }
 }
 
 export function useOrganization(id: string | null) {
