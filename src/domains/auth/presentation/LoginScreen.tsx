@@ -55,7 +55,7 @@ export function LoginScreen() {
     >
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         {formError && (
-          <div className="rounded-xl border border-[var(--color-danger)]/30 bg-[var(--color-danger)]/5 px-3.5 py-2.5 text-sm text-[var(--color-danger)]">
+          <div className="rounded-xl border border-danger/25 bg-danger/5 px-3.5 py-2.5 text-sm font-medium text-danger">
             {formError}
           </div>
         )}

@@ -230,7 +230,7 @@ function CurrentOrganization({ organizationId }: { organizationId: string }) {
             <Spinner className="size-6 text-brand-600" />
           </div>
         ) : members?.length ? (
-          <ul className="mt-4 divide-y divide-[var(--color-line)]">
+          <ul className="mt-4 divide-y divide-line">
             {members.map((member) => (
               <li key={member.id} className="flex items-center gap-3 py-3">
                 <span className="grid size-8 shrink-0 place-items-center rounded-full bg-brand-500/12 text-xs font-bold text-brand-700 ring-1 ring-inset ring-brand-500/15">

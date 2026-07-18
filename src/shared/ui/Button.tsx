@@ -28,7 +28,7 @@ const button = cva(
         ],
         ghost: 'text-brand-700 hover:bg-brand-500/10',
         danger:
-          'bg-[var(--color-danger)] text-white shadow-[var(--shadow-e2)] hover:brightness-110',
+          'bg-danger text-white shadow-[var(--shadow-e2)] hover:brightness-110',
       },
       size: {
         sm: 'h-9 px-3.5 text-sm',

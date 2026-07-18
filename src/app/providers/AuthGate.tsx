@@ -17,8 +17,9 @@ export function AuthGate({ children }: { children: ReactNode }) {
 
   if (status === 'idle' || status === 'loading') {
     return (
-      <div className="grid min-h-screen place-items-center bg-surface-alt">
-        <div className="flex flex-col items-center gap-4">
+      // Sem fundo próprio: deixa a aurora do body aparecer atrás
+      <div className="grid min-h-screen place-items-center">
+        <div className="flex flex-col items-center gap-5">
           <Logo withText={false} className="scale-125" />
           <Spinner className="size-6 text-brand-600" />
         </div>

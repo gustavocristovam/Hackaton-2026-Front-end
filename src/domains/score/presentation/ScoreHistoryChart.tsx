@@ -81,7 +81,7 @@ function ScoreTooltip({ active, payload }: TooltipPayload) {
   if (!active || !payload?.length) return null
   const point = payload[0].payload
   return (
-    <div className="rounded-xl border border-[var(--color-line)] bg-white px-3 py-2 shadow-md">
+    <div className="rounded-xl border border-(--glass-border) bg-white/90 px-3 py-2 shadow-[var(--shadow-e2)] backdrop-blur-md">
       <p className="text-xs text-muted">{formatDay(point.date)}</p>
       <p className="flex items-center gap-1.5 text-sm font-semibold text-ink">
         <span

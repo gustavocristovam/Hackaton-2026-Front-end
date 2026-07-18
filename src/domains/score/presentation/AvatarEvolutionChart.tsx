@@ -104,7 +104,7 @@ function AttributesTooltip({ active, payload }: TooltipPayload) {
   if (!active || !payload?.length) return null
   const entry = payload[0].payload
   return (
-    <div className="rounded-xl border border-[var(--color-line)] bg-white px-3 py-2 shadow-md">
+    <div className="rounded-xl border border-(--glass-border) bg-white/90 px-3 py-2 shadow-[var(--shadow-e2)] backdrop-blur-md">
       <p className="mb-1 text-xs text-muted">{formatDay(entry.date)}</p>
       {SERIES.map((series) => (
         <p
