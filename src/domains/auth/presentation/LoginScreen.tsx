@@ -21,7 +21,7 @@ export function LoginScreen() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: 'jhonatas.goncalves@gmail.com', password: '3434343433' },
   })
 
   const onSubmit = handleSubmit(async (values) => {
@@ -62,7 +62,9 @@ export function LoginScreen() {
         <Input
           type="email"
           label="E-mail"
+          defaultValue={"jhonatas.goncalves@gmail.com"}
           placeholder="voce@email.com"
+          value={"jhonatas.goncalves@gmail.com"}
           autoComplete="email"
           leftIcon={<Mail className="size-4" />}
           error={errors.email?.message}
@@ -74,6 +76,7 @@ export function LoginScreen() {
           placeholder="••••••••"
           autoComplete="current-password"
           leftIcon={<Lock className="size-4" />}
+          value={"senhaaa31342142"}
           error={errors.password?.message}
           {...register('password')}
         />
