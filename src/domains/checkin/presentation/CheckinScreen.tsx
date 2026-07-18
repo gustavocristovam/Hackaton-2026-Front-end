@@ -5,6 +5,7 @@ import { Check, Droplets, Dumbbell, Moon, Smile, Utensils, Zap } from 'lucide-re
 import { Card } from '@/shared/ui/Card'
 import { Button } from '@/shared/ui/Button'
 import { Spinner } from '@/shared/ui/Spinner'
+import { PageHeader } from '@/shared/ui/PageHeader'
 import { cn } from '@/shared/lib/cn'
 import {
   AGUA_OPTIONS,
@@ -54,14 +55,13 @@ export function CheckinScreen() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <header>
-        <h1 className="text-2xl font-bold text-ink">Check-in de hoje</h1>
-        <p className="mt-1 text-sm text-muted">
-          Seis perguntas rápidas para o seu avatar acompanhar o seu dia.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow={todayLabel()}
+        title="Check-in de hoje"
+        subtitle="Seis perguntas rápidas para o seu avatar acompanhar o seu dia."
+      />
 
-      <div className="mt-8 space-y-4">
+      <div className="mt-8 space-y-3.5">
         <Question icon={<Moon className="size-4" />} label="Como foi seu sono?">
           <Options
             options={SONO_OPTIONS}
@@ -132,28 +132,33 @@ export function CheckinScreen() {
       </div>
 
       {/* Prévia do score — feedback imediato, valor oficial vem da API */}
-      <Card className="mt-6 flex items-center justify-between p-5">
+      <Card variant="brand" className="mt-5 flex items-center justify-between p-5">
         <div>
-          <p className="text-sm font-medium text-muted">Prévia do seu score</p>
-          <p className="text-xs text-muted/80">
+          <p className="text-sm font-bold tracking-tight text-ink">
+            Prévia do seu score
+          </p>
+          <p className="mt-0.5 text-xs text-muted">
             O valor final é confirmado pelo servidor.
           </p>
         </div>
         <div className="text-right">
           <motion.p
             key={preview}
-            initial={{ scale: 0.8, opacity: 0.5 }}
+            initial={{ scale: 0.85, opacity: 0.4 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="text-3xl font-bold text-brand-600"
+            transition={{ type: 'spring', stiffness: 320, damping: 20 }}
+            className="text-4xl font-bold tracking-tight brand-text-gradient"
           >
             {preview}
           </motion.p>
-          <p className="text-xs font-medium text-muted">{classifyScore(preview)}</p>
+          <p className="text-xs font-semibold text-brand-700">
+            {classifyScore(preview)}
+          </p>
         </div>
       </Card>
 
       {submit.isError && (
-        <p className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-[var(--color-danger)]">
+        <p className="mt-4 rounded-xl border border-danger/25 bg-danger/5 px-4 py-3 text-sm font-medium text-danger">
           {(submit.error as Error).message}
         </p>
       )}
@@ -186,12 +191,16 @@ function Question({
 }) {
   return (
     <Card className="p-5">
-      <div className="mb-3 flex items-center gap-2">
-        <span className="grid size-7 place-items-center rounded-lg bg-brand-50 text-brand-600">
+      <div className="mb-3.5 flex items-center gap-2">
+        <span className="grid size-7 place-items-center rounded-lg bg-brand-500/12 text-brand-600 ring-1 ring-inset ring-brand-500/15">
           {icon}
         </span>
-        <h2 className="text-sm font-semibold text-ink">{label}</h2>
-        {optional && <span className="text-xs text-muted">(opcional)</span>}
+        <h2 className="text-sm font-bold tracking-tight text-ink">{label}</h2>
+        {optional && (
+          <span className="rounded-md bg-ink/5 px-1.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-wide text-muted">
+            opcional
+          </span>
+        )}
       </div>
       {children}
     </Card>
@@ -239,14 +248,25 @@ function Chip({
       aria-pressed={selected}
       onClick={onClick}
       className={cn(
-        'rounded-xl border px-3.5 py-2 text-sm font-medium transition-colors',
+        'rounded-xl border px-3.5 py-2 text-sm font-semibold',
+        'transition-[transform,box-shadow,background-color,border-color] duration-200 ease-[cubic-bezier(0.2,0,0,1)]',
+        'active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/50 focus-visible:ring-offset-2',
         selected
-          ? 'border-brand-600 bg-brand-600 text-white'
-          : 'border-[var(--color-line)] bg-white text-ink hover:border-brand-300 hover:bg-brand-50',
+          ? 'brand-gradient border-transparent text-white shadow-[var(--shadow-glow),inset_0_1px_0_0_rgb(255_255_255/0.28)]'
+          : 'border-(--glass-border) bg-white/60 text-ink shadow-[var(--shadow-e1),var(--glass-highlight)] backdrop-blur-md hover:border-brand-300 hover:bg-white/90',
         className,
       )}
     >
       {children}
     </button>
   )
+}
+
+/** Data por extenso no eyebrow — ancora o "hoje" do título. */
+function todayLabel(): string {
+  return new Date().toLocaleDateString('pt-BR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  })
 }

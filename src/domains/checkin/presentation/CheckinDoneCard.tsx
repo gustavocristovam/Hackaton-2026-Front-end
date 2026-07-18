@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router'
-import { CheckCircle2, Pencil } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Pencil } from 'lucide-react'
 import { Card } from '@/shared/ui/Card'
+import { Button } from '@/shared/ui/Button'
 import {
   canEditCheckin,
   classifyScore,
@@ -20,59 +21,80 @@ export function CheckinDoneCard({ checkin }: { checkin: DailyCheckin }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
       >
-        <Card className="p-8 text-center">
+        <Card variant="solid" className="relative overflow-hidden p-8 text-center">
+          {/* Brilho de celebração atrás do ícone */}
+          <div className="pointer-events-none absolute left-1/2 top-0 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-400/25 blur-3xl" />
+
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 12, delay: 0.1 }}
-            className="mx-auto grid size-16 place-items-center rounded-full bg-brand-50 text-brand-600"
+            className="relative mx-auto grid size-16 place-items-center rounded-full brand-gradient text-white shadow-[var(--shadow-glow),inset_0_1px_0_0_rgb(255_255_255/0.35)]"
           >
             <CheckCircle2 className="size-9" />
           </motion.span>
 
-          <h1 className="mt-5 text-2xl font-bold text-ink">Check-in concluído!</h1>
-          <p className="mt-1 text-sm text-muted">
+          <h1 className="relative mt-5 text-2xl font-bold tracking-tight text-ink">
+            Check-in concluído
+          </h1>
+          <p className="relative mt-1.5 text-sm text-muted">
             Você já registrou seu dia. Volte amanhã para manter a sequência.
           </p>
 
-          <div className="mt-6 grid grid-cols-2 gap-4">
-            <div className="rounded-xl bg-brand-50 p-4">
-              <p className="text-xs font-medium text-muted">Score do dia</p>
-              <p className="mt-1 text-3xl font-bold text-brand-700">
-                {checkin.scoreDia}
-              </p>
-              <p className="text-xs font-medium text-brand-600">
-                {classifyScore(checkin.scoreDia)}
-              </p>
-            </div>
-            <div className="rounded-xl bg-brand-50 p-4">
-              <p className="text-xs font-medium text-muted">XP ganho</p>
-              <p className="mt-1 text-3xl font-bold text-brand-700">
-                +{checkin.xpGanho}
-              </p>
-              <p className="text-xs font-medium text-brand-600">experiência</p>
-            </div>
+          <div className="relative mt-7 grid grid-cols-2 gap-3.5">
+            <Metric
+              label="Score do dia"
+              value={checkin.scoreDia}
+              caption={classifyScore(checkin.scoreDia)}
+            />
+            <Metric
+              label="XP ganho"
+              value={`+${checkin.xpGanho}`}
+              caption="experiência"
+            />
           </div>
 
-          <Link
-            to="/"
-            className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-xl bg-brand-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-          >
-            Ver meu avatar
+          <Link to="/" className="relative mt-6 block">
+            <Button size="lg" block className="group">
+              Ver meu avatar
+              <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Button>
           </Link>
 
           {editable ? (
-            <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted">
+            <p className="relative mt-4 flex items-center justify-center gap-1.5 text-xs text-muted">
               <Pencil className="size-3" />
               Você pode corrigir as respostas por até {EDIT_WINDOW_HOURS}h.
             </p>
           ) : (
-            <p className="mt-4 text-xs text-muted">
+            <p className="relative mt-4 text-xs text-muted">
               A janela de edição deste check-in já encerrou.
             </p>
           )}
         </Card>
       </motion.div>
+    </div>
+  )
+}
+
+function Metric({
+  label,
+  value,
+  caption,
+}: {
+  label: string
+  value: string | number
+  caption: string
+}) {
+  return (
+    <div className="rounded-xl border border-brand-200/60 bg-brand-50/70 p-4 backdrop-blur-sm">
+      <p className="text-[0.6875rem] font-semibold uppercase tracking-wide text-muted">
+        {label}
+      </p>
+      <p className="mt-1 text-3xl font-bold tracking-tight brand-text-gradient">
+        {value}
+      </p>
+      <p className="text-xs font-semibold text-brand-700">{caption}</p>
     </div>
   )
 }
