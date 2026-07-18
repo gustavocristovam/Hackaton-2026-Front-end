@@ -264,6 +264,51 @@ function seedOrganization() {
     ],
   }
   db.orgs.set(org.id, org)
+
+  // Segunda organização: o usuário participa como membro comum.
+  // Existe para a listagem de "minhas organizações" ter mais de um item.
+  const gym: MockOrg = {
+    id: 'org_0002',
+    name: 'Studio Movimento',
+    code: 'MOVE26',
+    tipo: 'academia',
+    ownerId: 'usr_0003',
+    createdAt: `${isoDate(daysAgo(52))}T08:30:00.000Z`,
+    members: [
+      {
+        id: 'mem_0101',
+        userId: 'usr_0003',
+        name: 'Rafael Nogueira',
+        role: 'owner',
+        joinedAt: `${isoDate(daysAgo(52))}T08:30:00.000Z`,
+        total: Math.round(74 * 26),
+        dias: 26,
+      },
+      {
+        id: 'mem_0102',
+        userId: db.user.id,
+        name: db.user.name,
+        role: 'member',
+        joinedAt: `${isoDate(daysAgo(40))}T19:15:00.000Z`,
+        total: 0,
+        dias: 0,
+      },
+      ...MEMBER_NAMES.slice(4, 9).map((name, index) => {
+        const dias = Math.round(14 + rand() * 14)
+        const media = 52 + rand() * 34
+        return {
+          id: `mem_${String(index + 110).padStart(4, '0')}`,
+          userId: `usr_${String(index + 20).padStart(4, '0')}`,
+          name,
+          role: 'member' as const,
+          joinedAt: `${isoDate(daysAgo(38 - index))}T11:00:00.000Z`,
+          total: Math.round(media * dias),
+          dias,
+        }
+      }),
+    ],
+  }
+  db.orgs.set(gym.id, gym)
 }
 
 seedCheckins()
@@ -812,6 +857,16 @@ route('POST', '/organizations/join', ({ body }) => {
   }
   return { organization: orgPayload(org) }
 })
+
+/**
+ * Organizações das quais o usuário participa. Rota literal, então vence
+ * `/organizations/:id` no matcher (menos segmentos dinâmicos).
+ */
+route('GET', '/organizations/me', () => ({
+  data: [...db.orgs.values()]
+    .filter((org) => org.members.some((m) => m.userId === db.user.id))
+    .map(orgPayload),
+}))
 
 route('GET', '/organizations/:id', ({ params }) => orgPayload(requireOrg(params.id!)))
 

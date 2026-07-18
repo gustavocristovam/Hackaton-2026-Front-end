@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { OrgType } from '../domain/Organization'
+import type { OrgType, Organization } from '../domain/Organization'
 import {
   organizationRepository,
   type RankingParams as RepoRankingParams,
@@ -12,10 +12,36 @@ import { useCurrentOrgStore } from './currentOrgStore'
 
 export const orgKeys = {
   all: ['organization'] as const,
+  mine: (ids: string[]) => [...orgKeys.all, 'mine', ids] as const,
   detail: (id: string) => [...orgKeys.all, 'detail', id] as const,
   members: (id: string) => [...orgKeys.all, 'members', id] as const,
   ranking: (id: string, params: RepoRankingParams) =>
     [...orgKeys.all, 'ranking', id, params] as const,
+}
+
+/**
+ * Todas as organizações do usuário. Prefere `GET /organizations/me`; se o
+ * back-end não tiver a rota, resolve os ids guardados no store um a um.
+ */
+export function useMyOrganizations() {
+  const organizationIds = useCurrentOrgStore((s) => s.organizationIds)
+
+  return useQuery({
+    queryKey: orgKeys.mine(organizationIds),
+    queryFn: async (): Promise<Organization[]> => {
+      const remote = await organizationRepository.mine()
+      if (remote) return remote
+
+      // Fallback: uma organização removida no servidor simplesmente falha aqui
+      // e some da lista, sem derrubar as demais.
+      const results = await Promise.allSettled(
+        organizationIds.map((id) => organizationRepository.byId(id)),
+      )
+      return results
+        .filter((r): r is PromiseFulfilledResult<Organization> => r.status === 'fulfilled')
+        .map((r) => r.value)
+    },
+  })
 }
 
 export function useOrganization(id: string | null) {
@@ -46,37 +72,37 @@ export function useOrganizationRanking(
 }
 
 export function useCreateOrganization() {
-  const setOrganizationId = useCurrentOrgStore((s) => s.setOrganizationId)
+  const addOrganization = useCurrentOrgStore((s) => s.addOrganization)
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ name, tipo }: { name: string; tipo?: OrgType }) =>
       createOrganization(name, tipo),
     onSuccess: (org) => {
-      setOrganizationId(org.id)
+      addOrganization(org.id)
       void queryClient.invalidateQueries({ queryKey: orgKeys.all })
     },
   })
 }
 
 export function useJoinOrganization() {
-  const setOrganizationId = useCurrentOrgStore((s) => s.setOrganizationId)
+  const addOrganization = useCurrentOrgStore((s) => s.addOrganization)
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (code: string) => joinOrganizationByCode(code),
     onSuccess: (org) => {
-      setOrganizationId(org.id)
+      addOrganization(org.id)
       void queryClient.invalidateQueries({ queryKey: orgKeys.all })
     },
   })
 }
 
 export function useLeaveOrganization() {
-  const setOrganizationId = useCurrentOrgStore((s) => s.setOrganizationId)
+  const removeOrganization = useCurrentOrgStore((s) => s.removeOrganization)
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (id: string) => organizationRepository.leave(id),
-    onSuccess: () => {
-      setOrganizationId(null)
+    onSuccess: (_data, id) => {
+      removeOrganization(id)
       void queryClient.invalidateQueries({ queryKey: orgKeys.all })
     },
   })

@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api/apiClient'
+import { ApiError } from '@/shared/api/ApiError'
 import type {
   Organization,
   OrganizationMember,
@@ -10,6 +11,7 @@ import {
   toMembers,
   toOrganization,
   toOrganizationLoose,
+  toOrganizations,
   toRanking,
 } from './organizationDto'
 
@@ -27,6 +29,20 @@ export interface RankingParams {
 export const organizationRepository = {
   async create(input: CreateOrgInput): Promise<Organization> {
     return toOrganizationLoose(await apiClient.post<unknown>('/organizations', input))
+  },
+
+  /**
+   * Organizações das quais o usuário participa.
+   * `null` quando o back-end não expõe a rota — aí o app cai no fallback
+   * de buscar uma a uma pelos ids conhecidos localmente.
+   */
+  async mine(): Promise<Organization[] | null> {
+    try {
+      return toOrganizations(await apiClient.get<unknown>('/organizations/me'))
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) return null
+      throw error
+    }
   },
 
   async byId(id: string): Promise<Organization> {
