@@ -132,7 +132,7 @@ export function HomeScreen() {
           to="/conquistas"
           icon={<Trophy className="size-4" />}
           title="Conquistas"
-          description="Medalhas e troféus desbloqueados."
+          description="Medalhas que você desbloqueou."
         />
         <ShortcutCard
           to="/organizacao"

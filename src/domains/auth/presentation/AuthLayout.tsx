@@ -62,7 +62,7 @@ export function AuthLayout({
                 Score, XP e streak de 100 dias
               </Feature>
               <Feature icon={<Trophy className="size-5" />} delay={0.26}>
-                Medalhas, troféus e ranking com sua organização
+                Medalhas e ranking com sua organização
               </Feature>
             </ul>
           </div>

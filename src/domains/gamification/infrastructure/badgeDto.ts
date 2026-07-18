@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { Badge, EarnedBadge, Trophy } from '../domain/Badge'
+import type { Badge, EarnedBadge } from '../domain/Badge'
 
 const badgeDtoSchema = z.object({
   id: z.union([z.string(), z.number()]).nullish().transform((v) => String(v ?? '')),
@@ -43,20 +43,6 @@ export function toEarnedBadges(raw: unknown): EarnedBadge[] {
     const inner = dto.badge ? badgeDtoSchema.parse(dto.badge) : dto
     return {
       ...baseBadge(inner),
-      earnedAt: dto.earned_at ?? dto.earnedAt ?? null,
-    }
-  })
-}
-
-export function toTrophies(raw: unknown): Trophy[] {
-  return unwrapList(raw).map((item) => {
-    const dto = badgeDtoSchema.parse(item)
-    const inner = dto.badge ? badgeDtoSchema.parse(dto.badge) : dto
-    const base = baseBadge(inner)
-    return {
-      id: base.id,
-      name: base.name,
-      description: base.description,
       earnedAt: dto.earned_at ?? dto.earnedAt ?? null,
     }
   })

@@ -764,31 +764,6 @@ route('GET', '/badges/me', () => {
   }
 })
 
-route('GET', '/trophies/me', () => {
-  const level = levelFromXp(xpTotal())
-  const trophies = [
-    {
-      id: 'trf_01',
-      nome: 'Troféu de Consistência',
-      descricao: `Sequência recorde de ${recordStreak()} dias.`,
-      earned_at: recordStreak() >= 10 ? `${isoDate(daysAgo(8))}T20:00:00.000Z` : null,
-    },
-    {
-      id: 'trf_02',
-      nome: 'Troféu de Evolução',
-      descricao: `Avatar no nível ${level}.`,
-      earned_at: level >= 3 ? `${isoDate(daysAgo(12))}T20:00:00.000Z` : null,
-    },
-    {
-      id: 'trf_03',
-      nome: 'Troféu de Equipe',
-      descricao: 'Top 3 no ranking da sua organização.',
-      earned_at: `${isoDate(daysAgo(4))}T20:00:00.000Z`,
-    },
-  ]
-  return { data: trophies.filter((t) => t.earned_at !== null) }
-})
-
 // ---------------------------------------------------------------------------
 // Rotas: organizações
 // ---------------------------------------------------------------------------

@@ -130,32 +130,6 @@ function BadgeCard({ badge, index }: { badge: BadgeProgress; index: number }) {
   )
 }
 
-function SectionHeading({
-  icon,
-  tone,
-  children,
-}: {
-  icon: React.ReactNode
-  tone: 'brand' | 'amber'
-  children: React.ReactNode
-}) {
-  return (
-    <h2 className="mb-4 flex items-center gap-2 font-bold tracking-tight text-ink">
-      <span
-        className={cn(
-          'grid size-7 place-items-center rounded-lg ring-1 ring-inset',
-          tone === 'brand'
-            ? 'bg-brand-500/12 text-brand-600 ring-brand-500/15'
-            : 'bg-amber-500/12 text-amber-600 ring-amber-500/15',
-        )}
-      >
-        {icon}
-      </span>
-      {children}
-    </h2>
-  )
-}
-
 function formatDate(value: string): string {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return value
