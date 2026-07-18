@@ -137,7 +137,7 @@ const db = {
   user: {
     id: 'usr_0001',
     name: 'Gustavo Cristovam',
-    email: 'J',
+    email: 'jhonatas.goncalves@gmail.com',
     createdAt: `${isoDate(daysAgo(HISTORY_DAYS + 4))}T09:12:00.000Z`,
   },
   checkins: [] as MockCheckin[],
