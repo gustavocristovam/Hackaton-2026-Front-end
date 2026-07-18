@@ -15,7 +15,7 @@ export function Logo({
       </span>
       {withText && (
         <span className="text-lg font-bold tracking-tight text-ink">
-          Saúde<span className="text-brand-600">Gamificada</span>
+          Orb<span className="text-brand-600">Fit</span>
         </span>
       )}
     </div>

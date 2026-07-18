@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { OrgType, RankingParams } from '../domain/Organization'
+import type { OrgType } from '../domain/Organization'
 import {
   organizationRepository,
   type RankingParams as RepoRankingParams,
@@ -94,4 +94,4 @@ export function useRemoveMember(organizationId: string) {
   })
 }
 
-export type { RankingParams }
+export type { RepoRankingParams as RankingParams }

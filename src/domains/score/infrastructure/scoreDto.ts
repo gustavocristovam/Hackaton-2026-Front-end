@@ -105,10 +105,10 @@ export function toWeeklyFeedback(raw: unknown): WeeklyFeedback {
       media: numeric.optional(),
       dias_treinados: numeric.optional(),
       diasTreinados: numeric.optional(),
-      destaques: z.unknown(),
-      highlights: z.unknown(),
-      pontos_de_atencao: z.unknown(),
-      atencao: z.unknown(),
+      destaques: z.unknown().optional(),
+      highlights: z.unknown().optional(),
+      pontos_de_atencao: z.unknown().optional(),
+      atencao: z.unknown().optional(),
     })
     .parse(raw ?? {})
   return {
